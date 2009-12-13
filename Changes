@@ -1,0 +1,8 @@
+Revision history for Bootylicious::Plugin::Gallery
+
+0.6 14-12-2009
+	Makefile.pl fix (add  Image::Magick dependence)
+	Updated due to bootylicious internal changes (vti)
+	
+0.5 22-11-2009
+	Prepared for CPAN
