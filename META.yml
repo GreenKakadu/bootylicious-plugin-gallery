@@ -10,6 +10,7 @@ meta-spec:
 name: Bootylicious-Plugin-Gallery
 requires:
   Digest::MD5: 0
+  Image::Magick: 6.00
   Image::Magick::Thumbnail::Fixed: 0
   Mojo: 0.999910
-version: 0.05
+version: 0.06

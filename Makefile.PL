@@ -11,13 +11,14 @@ WriteMakefile(
   NAME      => 'Bootylicious::Plugin::Gallery',
   AUTHOR    => "Konstantin\ Kapitanov\ \<perlovik\@gmail\.com\>",
   ABSTRACT  => "Gallery\ plugin\ for\ Bootylicious",
-  VERSION   => '0.05',
+  VERSION   => '0.06',
   EXE_FILES => [ qw() ],
   (eval { ExtUtils::MakeMaker->VERSION(6.31) } ? (LICENSE => 'perl') : ()),
   PREREQ_PM    => {
     "Mojo" => '0.999910',
     "Image::Magick::Thumbnail::Fixed" => '0',
     "Digest::MD5" => '0',
+    "Image::Magick" => '6.00',
   },
   test => {TESTS => 't/*.t'}
 );
