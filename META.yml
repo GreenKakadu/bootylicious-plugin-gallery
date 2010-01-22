@@ -13,4 +13,4 @@ requires:
   Image::Magick: 6.00
   Image::Magick::Thumbnail::Fixed: 0
   Mojo: 0.999910
-version: 0.06
+version: 0.07

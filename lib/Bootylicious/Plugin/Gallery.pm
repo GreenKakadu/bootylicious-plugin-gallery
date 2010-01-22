@@ -2,13 +2,12 @@ package Bootylicious::Plugin::Gallery;
 
 use strict;
 use warnings;
-
-use base 'Mojo::Base';
+use base 'Mojolicious::Plugin';
 
 use Digest::MD5 qw( md5_hex );
 use Image::Magick::Thumbnail::Fixed;
 
-our $VERSION = '0.05';
+our $VERSION = '0.07';
 
 my %content_types = (
     'jpg'  => 'image/jpeg',
@@ -28,7 +27,23 @@ __PACKAGE__->attr('imagetypes'     => join('|', keys %content_types))
   ;    #  build the list of valid image types
 
 
-sub hook_finalize {
+sub register {
+    my ($self, $app, $args) = @_;
+    $args ||= {};
+    
+    $self->public_uri($args->{'public_uri'} ) if $args->{'public_uri'};
+    $self->string_to_replace($args->{'string_to_replace'} ) if $args->{'string_to_replace'};
+    $self->columns($args->{'columns'} ) if $args->{'columns'};
+    $self->thumb_width($args->{'thumb_width'} ) if $args->{'thumb_width'};
+    $self->thumb_height($args->{'thumb_height'} ) if $args->{'thumb_height'};
+    $self->bgcolor($args->{'bgcolor'} ) if $args->{'bgcolor'};
+    $self->padding($args->{'padding'} ) if $args->{'padding'};
+    $self->imagetypes($args->{'imagetypes'} ) if $args->{'imagetypes'};
+    
+    $app->plugins->add_hook(after_dispatch => sub { shift; $self->gallery(@_) });
+}
+
+sub gallery {
     my $self = shift;
     my $c    = shift;
     my $path = $c->req->url->path;
@@ -39,9 +54,7 @@ sub hook_finalize {
     my $publicdir = $c->app->home->rel_dir(main::config('publicdir'));
 
     my $article = $c->stash('article');
-
-    my $gallery_name = $article->{timestamp} . '-' . $c->stash('alias');
-
+    my  $gallery_name =   sprintf("%d%02d%02d-%s",$article->{year}, $article->{month}, $article->{day},  $article->{name});
     my $gallerydir = $publicdir . '/' . $gallery_name;
 
     #not gallery article
@@ -218,7 +231,7 @@ Bootylicious::Plugin::Gallery - Gallery plugin for Bootylicious
 
 =head1 VERSION
 
-version 0.05
+version 0.07
 
 =head1 SYNOPSIS
 
@@ -318,10 +331,17 @@ Set list of valid image types.
     
     
 =head1 METHODS
+
+=head2 C<register>
  
-=head2 C<hook_finalize>
+This method will be called by L<Mojolicious::Plugins> at startup time,
+your plugin should use this to hook into the application.  
+
  
-Plugin is run just after L<bootylicious> routes finalization.    
+=head2 C<gallery>
+ 
+Plugin is run just "after_dispatch" hook and make gallery.      
+
 
 =head1 AUTHOR
 
